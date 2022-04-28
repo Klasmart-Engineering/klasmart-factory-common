@@ -56,9 +56,6 @@ kubectl label namespace default istio-injection=enabled
 echo "Setting up local TLS"
 kubectl -n istio-system create secret tls kidsloop-local-tls-secret --key=.certs/key.pem --cert=.certs/cert.pem
 
-echo "Application via Istio Ingress (https): https://fe.sso.kidsloop.live:8443"
-echo "Application via Istio Ingress (http):  http://fe.sso.kidsloop.live:8080"
-#launch/verify application via Istio
 echo "Cluster ready..."
 
 ./install-redpanda.zsh
