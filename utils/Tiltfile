@@ -1,0 +1,10 @@
+load('ext://color', 'color')
+
+def warn_missing_repo(repository_name):
+    warn('skipping resource, repository is not present: ' + repository_name)
+
+def warn(message):
+    print(color.yellow('WARN: ' + message))
+
+def info(message):
+    print(color.blue('INFO: ' + message))
