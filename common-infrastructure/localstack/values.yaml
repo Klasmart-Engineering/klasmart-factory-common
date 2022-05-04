@@ -1,0 +1,5 @@
+extraEnvVars:
+  - name: DEFAULT_REGION
+    value: "eu-west-2"
+  - name: SERVICES
+    value: "s3,dynamodb"

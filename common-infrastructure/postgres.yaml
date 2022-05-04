@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: shared-postgres
+  name: shared-postgres
+spec:
+  ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
+  selector:
+    service: shared-postgres
+status:
+  loadBalancer: {}    
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: shared-postgres
+  name: shared-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: shared-postgres
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: shared-postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: shared-postgres
+            - name: POSTGRES_PASSWORD
+              value: kidsloop
+          image: postgres
+          name: shared-postgres
+          ports:
+            - containerPort: 5432
+          resources: {}
+      restartPolicy: Always

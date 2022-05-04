@@ -1,0 +1,5 @@
+k8s_yaml('./backstage.yaml')
+k8s_yaml('./postgres.yaml')
+
+k8s_resource('shared-postgres', labels=['common-infrastructure'], port_forwards=5432)
+k8s_resource('backstage', labels=['common-infrastructure'], port_forwards=7007)

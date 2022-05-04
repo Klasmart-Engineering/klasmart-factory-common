@@ -5,7 +5,7 @@ load('./utils/Tiltfile', 'warn_missing_repo')
 
 
 # required
-# include('./common-infrastructure/Tiltfile')
+include('./common-infrastructure/Tiltfile')
 
 # every service requires a helm chart from the central repository
 if not os.path.exists('../microgateway-base-helm'):

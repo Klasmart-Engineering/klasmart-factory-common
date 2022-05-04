@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage
+  template:
+    metadata:
+      labels:
+        app: backstage
+    spec:
+      containers:
+        - name: backstage
+          imagePullPolicy: Never
+          image: backstage:latest
+          ports:
+            - containerPort: 7007
+          env:
+            - name: POSTGRES_HOST
+              value: localhost
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: kidsloop
+            - name: AUTH_GITHUB_CLIENT_ID
+              value: cffa114318bba6c3875e
+            - name: AUTH_GITHUB_CLIENT_SECRET
+              value: 7d6a517aa28f5598812ec28ed759815be3ef3aa7
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: backstage-service
+spec:
+  selector:
+    app: backstage
+  ports:
+    - port: 7007

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: pact-broker
+  name: pact-broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: pact-broker
+  template:
+    metadata:
+      labels:
+        io.kompose.service: pact-broker
+    spec:
+      containers:
+      - env:
+        - name: PACT_BROKER_DATABASE_USERNAME
+          value: pact-postgres
+        - name: PACT_BROKER_DATABASE_PASSWORD
+          value: pact-postgres
+        - name: PACT_BROKER_DATABASE_HOST
+          value: pact-postgres
+        - name: PACT_BROKER_DATABASE_NAME
+          value: postgres
+        - name: PACT_BROKER_PORT
+          value: '9292'
+        image: pactfoundation/pact-broker:2.93.2.0
+        name: pact-broker
+        ports:
+        - containerPort: 9292
+        resources: {}
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: pact-broker
+  name: pact-broker
+spec:
+  ports:
+  - name: http
+    port: 9292
+    targetPort: 9292
+  selector:
+    io.kompose.service: pact-broker
+  type: LoadBalancer

@@ -13,8 +13,7 @@ k3d cluster create local-cluster \
   --port 8080:80@loadbalancer \
   --port 8081:443@loadbalancer \
   --port 30001:30001@loadbalancer \
-  --agents-memory=8G \
-  --registry-create local-registry \
+  --registry-create k3d-myregistry.local:12345 \
   --volume "$PWD"/backup:/tmp/backup
 
 curl -L https://istio.io/downloadIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
