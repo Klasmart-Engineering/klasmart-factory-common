@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: kidsloop-factory-common
+  description: Shared components and entry point for Factory
+  annotations:
+    github.com/project-slug: kidsloop/kidsloop-factory-common
+spec:
+  type: service
+  owner: kidsloop/maintainers
+  lifecycle: experimental
