@@ -1,0 +1,61 @@
+apiVersion: redpanda.vectorized.io/v1alpha1
+kind: Cluster
+metadata:
+  name: redpanda-cluster
+spec:
+  image: "vectorized/redpanda"
+  version: "latest"
+  replicas: 1
+  resources:
+    requests:
+      cpu: 1
+      memory: 1.2G
+    limits:
+      cpu: 1
+      memory: 1.2G
+  configuration:
+    rpcServer:
+      port: 33145
+    kafkaApi:
+      - port: 9092
+        # tls:
+        #   enabled: true
+        #   requireClientAuth: true
+        #   issuerRef:
+        #     name: ca-issuer
+        #     kind: Issuer
+      # - external:
+      #     enabled: true
+      #     subdomain: local.rp
+        # port: 30001
+        # tls:
+        #   enabled: true
+        #   requireClientAuth: true
+        #   issuerRef:
+        #     name: ca-issuer
+        #     kind: Issuer
+    pandaproxyApi:
+      - port: 8082
+      # - external:
+      #     enabled: true
+      #     subdomain: local.rp
+      #   tls:
+      #     enabled: true
+      #     requireClientAuth: true
+    schemaRegistry:
+      port: 8081
+      # external:
+      #   enabled: true
+      #   subdomain: local.rp
+      # tls:
+      #   enabled: true
+      #   issuerRef:
+      #       name: ca-issuer
+      #       kind: Issuer
+    adminApi:
+      - port: 9644
+        # tls:
+        #   enabled: true
+    developerMode: true
+  nodeSelector:
+    kubernetes.io/hostname: k3d-local-cluster-server-0

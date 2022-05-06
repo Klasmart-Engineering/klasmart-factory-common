@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rpk
+spec:
+  containers:
+    - name: rpk
+      image: 'vectorized/redpanda:v22.1.1'
+      command:
+        - /bin/bash
+        - '-c'
+      args:
+        - sleep infinity
+      volumeMounts:
+        - mountPath: /etc/tls/certs
+          name: certs-path
+        - mountPath: /etc/tls/certs/ca
+          name: ca-path
+        - mountPath: /etc/redpanda
+          name: rpk-config
+  restartPolicy: Never
+  volumes:
+    - name: certs-path
+      secret:
+        secretName: redpanda-cluster-user-client
+    - name: ca-path
+      secret:
+        secretName: redpanda-cluster-redpanda
+    - name: rpk-config
+      configMap:
+        name: tls-config-map

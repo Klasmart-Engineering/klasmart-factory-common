@@ -13,7 +13,7 @@ k3d cluster create local-cluster \
   --port 8080:80@loadbalancer \
   --port 8081:443@loadbalancer \
   --port 30001:30001@loadbalancer \
-  --agents-memory=8G \
+  --agents-memory=4G \
   --registry-create local-registry \
   --volume "$PWD"/backup:/tmp/backup
 
@@ -37,6 +37,10 @@ istioctl operator init
 #     Istiod is enabled
 
 
+# https://github.com/istio/istio/issues/36762
+# For M1 macs: default istio operator and envoy do not work well.
+# A workaround seems to be to use the querycap istio instead
+
 kubectl apply -f - <<EOF
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
@@ -44,7 +48,21 @@ metadata:
   namespace: istio-system
   name: default-istiocontrolplane
 spec:
-  profile: default
+  # profile: default
+  hub: docker.io/querycapistio
+  meshConfig:
+    accessLogFile: /dev/stdout
+    outboundTrafficPolicy:
+    # Enable passthrough traffic? Set to ALLOW_ANY or REGISTRY_ONLY, default: ALLOW_ANY
+      mode: REGISTRY_ONLY
+    defaultConfig:
+      proxyMetadata:
+        # Enable basic DNS proxying
+        ISTIO_META_DNS_CAPTURE: "true"
+  components:
+    cni:
+      enabled: false
+
 EOF
 echo "Waiting for Istio to be ready..."
 sleep 15

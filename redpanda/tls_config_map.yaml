@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mtls-config-map
+data:
+  redpanda.yaml: |
+    redpanda:
+    rpk:
+      kafka_api:
+        brokers:
+          - 0.local.rp:30001
+        tls:
+          key_file: /etc/tls/certs/tls.key
+          cert_file: /etc/tls/certs/tls.crt
+          truststore_file: /etc/tls/certs/ca/ca.crt

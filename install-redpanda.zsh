@@ -33,14 +33,45 @@ helm install \
     --version $VERSION
 
 kubectl create ns panda-chat
+# inject istio into panda-chat namespace
+kubectl label namespace panda-chat istio-injection=enabled
+
+# CA_KEY=$(cat .certs/rootCA-key.pem |base64)
+# CA_CERT=$(cat .certs/rootCA.pem|base64)
+# echo """apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: ca-key-pair
+#   namespace: panda-chat
+# data:
+#   tls.crt: ${CA_CERT}
+#   tls.key: ${CA_KEY}""" > redpanda/cert_issuer_secret.yaml
+
+# kubectl apply -f redpanda/cert_issuer_secret.yaml
+
+# echo """apiVersion: cert-manager.io/v1
+# kind: Issuer
+# metadata:
+#   name: ca-issuer
+#   namespace: panda-chat
+# spec:
+#   ca:
+#     secretName: ca-key-pair""" > redpanda/cert_issuer.yaml
+
+# kubectl apply -f redpanda/cert_issuer.yaml
+# kubectl get issuers ca-issuer -n panda-chat -o wide
 
 echo "Waiting 20 seconds before standing up the redpanda cluster..."
-sleep 10 
+sleep 10
 echo "If the next command fails then try running it again manually, sometimes the system isn't ready."
+# certificate creaton for SSL/TLS termination
+# echo "Setting up local TLS"
+# kubectl -n panda-chat create secret tls tls-secret --key=.certs/key.pem --cert=.certs/cert.pem
+
 
 kubectl apply \
     -n panda-chat \
-    -f https://raw.githubusercontent.com/redpanda-data/redpanda/dev/src/go/k8s/config/samples/one_node_external.yaml
+    -f redpanda/redpanda_cluster_tls_external.yaml
 
 
 echo "Add this line to /etc/hosts file"
