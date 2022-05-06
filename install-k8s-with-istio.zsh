@@ -8,6 +8,7 @@ brew install jq
 
 # deploy k3d cluster with extra memory (8G) for Istio install
 k3d cluster create local-cluster \
+  --k3s-arg "--disable=traefik@server:0" \
   --image rancher/k3s:v1.20.15-k3s1 \
   --api-port 6443 \
   --port 8080:80@loadbalancer \
