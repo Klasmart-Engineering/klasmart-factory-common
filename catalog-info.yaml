@@ -5,7 +5,7 @@ metadata:
   description: Shared components and entry point for Factory
   annotations:
     github.com/project-slug: kidsloop/kidsloop-factory-common
-    backstage.io/techdocs-ref: dir:.
+    backstage.io/techdocs-ref: dir:./docs
 spec:
   type: service
   owner: kidsloop/maintainers
